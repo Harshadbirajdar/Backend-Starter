@@ -3,6 +3,7 @@ const BigPromise = require("../middleware/BigPromise");
 const cookieToken = require("../util/cookieToken");
 const emailHelper = require("../util/emailHelper");
 const crypto = require("crypto");
+const logger = require("../logger");
 
 exports.signup = BigPromise(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -37,6 +38,7 @@ exports.signin = BigPromise(async (req, res, next) => {
     return next(new Error("Email or password does not match or exist", 400));
   }
   cookieToken(user, res);
+  logger.info(`Signin IP ${req.ip} of ${user.email}`);
 });
 
 exports.forgotPassword = BigPromise(async (req, res, next) => {
